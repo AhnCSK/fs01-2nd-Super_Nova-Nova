@@ -70,12 +70,25 @@ function PlantModal({ data, onClose }) {
 
         {/* 스크롤 가능한 전체 콘텐츠 래퍼 */}
         <div className="modal-content">
-          {/* 🔶 HEADER */}
+          {/* HEADER */}
           <div className="modal-header">
             <div className="header-left">
-              <h2>
-                팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
-              </h2>
+              <div className="title-row">
+                <h2>
+                  팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
+                </h2>
+                {/* 1) 재배 시작 / 예상 수확 */}
+                <div className="card date-card-wrap">
+                  <div className="date-item date-start">
+                    <label>재배 시작</label>
+                    <span>{farm.started_at}</span>
+                  </div>
+                  <div className="date-item date-end">
+                    <label>예상 수확일</label>
+                    <span>{farm.expected_harvest_at}</span>
+                  </div>
+                </div>
+              </div>
               <p className="updated">업데이트: {current_sensor.logged_at}</p>
             </div>
 
@@ -85,14 +98,14 @@ function PlantModal({ data, onClose }) {
             </div>
           </div>
 
-          {/* 🟩 토스트는 모달 내부에 둠 */}
+          {/*  토스트는 모달 내부에 둠 */}
           <div className="toast-container">
             {alerts.map((a) => (
               <ToastAlert key={a.id} {...a} onClose={removeAlert} />
             ))}
           </div>
 
-          {/* 🔷 메인 3열 레이아웃 */}
+          {/*  메인 3열 레이아웃 */}
           <div className="modal-grid">
             {/* ========== LEFT COLUMN ========== */}
             <div className="grid-left">
@@ -117,18 +130,6 @@ function PlantModal({ data, onClose }) {
 
             {/* ========== MIDDLE COLUMN ========== */}
             <div className="grid-middle">
-              {/* 1) 재배 시작 / 예상 수확 */}
-              <div className="card date-card-wrap">
-                <div className="date-item">
-                  <label>재배 시작</label>
-                  <span>{farm.started_at}</span>
-                </div>
-                <div className="date-item">
-                  <label>예상 수확일</label>
-                  <span>{farm.expected_harvest_at}</span>
-                </div>
-              </div>
-
               {/* 2) 프리셋 */}
               <div className="card preset-card">
                 <PresetInfo preset_step={preset_step} />
@@ -159,12 +160,11 @@ function PlantModal({ data, onClose }) {
             <div className="grid-right">
               {/* 1) 센서 상태 요약 */}
               <div className="card sensor-status-card">
-                <div className="sensor-status-top">
-                  <WaterLevelCard value={current_sensor.water_level} />
-                </div>
-
                 <div className="sensor-status-main">
                   <SensorBar sensor={current_sensor} preset_step={preset_step} />
+                </div>
+                <div className="sensor-status-top">
+                  <WaterLevelCard value={current_sensor.water_level} />
                 </div>
               </div>
             </div>
