@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
 import PlantAddModal from "./PlantAddModal";
-import farmFullData from "./farmFullData";
+import { farmFullData } from "/src/api/mockDatas/farmFullData";
 
 function PlantManage() {
   const [selectedFarm, setSelectedFarm] = useState(null); // 상세 모달
@@ -42,7 +42,7 @@ function PlantManage() {
             ) : (
               <div className="empty-farm">
                 <span className="plus">+</span>
-                <p>식물 심기</p>
+                <p>클릭하여 팜을 생성하세요</p>
               </div>
             )}
           </div>
