@@ -1,4 +1,4 @@
-import {Routes, Route} from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // =============================
 // 공통 CSS / 레이아웃
@@ -21,7 +21,7 @@ import MyPageTimelapse from "./pages/MyPage/MyPageTimelapse";
 // =============================
 // 우영 로그인/회원가입 + 인증
 // =============================
-import {AuthProvider} from "./wooyoung_login/auth/AuthContext";
+import { AuthProvider } from "./wooyoung_login/auth/AuthContext";
 import Login from "./wooyoung_login/pages/Login";
 import Signup from "./wooyoung_login/pages/Signup";
 
@@ -33,6 +33,7 @@ import PWFindReset from "./wooyoung_login/pages/PWFindReset";
 
 // 테스트
 import TestHome from "./wooyoung_login/pages/TestHome";
+import AdminHome from "./wooyoung_login/pages/AdminHome";
 
 function App() {
   return (
@@ -80,6 +81,8 @@ function App() {
 
         {/* 테스트 페이지 */}
         <Route path="/wootest" element={<TestHome />} />
+        {/* 🔥 관리자 로그인 / 관리자 페이지 */}
+        <Route path="/admin" element={<AdminHome />} />
       </Routes>
     </AuthProvider>
   );
