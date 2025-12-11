@@ -10,6 +10,7 @@ import ToastAlert from "../../components/dashboard/ToastAlert";
 import ActuStatus from "../../components/dashboard/ActuStatus";
 import PresetInfo from "../../components/dashboard/PresetInfo";
 import PlantHistoryCard from "../../components/dashboard/PlantHistoryCard";
+import AlertSection from "../../components/dashboard/alerts/AlertSection";
 
 function PlantModal({ data, onClose }) {
   /* ------------------- 팝업 알림 ------------------- */
@@ -33,6 +34,7 @@ function PlantModal({ data, onClose }) {
   } = data ?? {};
 
   const { current_sensor, sensor_history } = transformSensorLog(sensor_log);
+  const activeStep = Array.isArray(preset_step) ? preset_step[0] : preset_step;
 
   useEffect(() => {
     if (!plant_alarm?.length) return;
@@ -70,12 +72,25 @@ function PlantModal({ data, onClose }) {
 
         {/* 스크롤 가능한 전체 콘텐츠 래퍼 */}
         <div className="modal-content">
-          {/* 🔶 HEADER */}
+          {/* HEADER */}
           <div className="modal-header">
             <div className="header-left">
-              <h2>
-                팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
-              </h2>
+              <div className="title-row">
+                <h2>
+                  팜 #{farm.farm_id} — {farm.plant_nickname} ({farm.plant_type})
+                </h2>
+                {/* 1) 재배 시작 / 예상 수확 */}
+                <div className="card date-card-wrap">
+                  <div className="date-item date-start">
+                    <label>재배 시작</label>
+                    <span>{farm.started_at}</span>
+                  </div>
+                  <div className="date-item date-end">
+                    <label>예상 수확일</label>
+                    <span>{farm.expected_harvest_at}</span>
+                  </div>
+                </div>
+              </div>
               <p className="updated">업데이트: {current_sensor.logged_at}</p>
             </div>
 
@@ -85,17 +100,17 @@ function PlantModal({ data, onClose }) {
             </div>
           </div>
 
-          {/* 🟩 토스트는 모달 내부에 둠 */}
+          {/*  토스트는 모달 내부에 둠 */}
           <div className="toast-container">
             {alerts.map((a) => (
               <ToastAlert key={a.id} {...a} onClose={removeAlert} />
             ))}
           </div>
 
-          {/* 🔷 메인 3열 레이아웃 */}
+          {/*  메인 3열 레이아웃 */}
           <div className="modal-grid">
             {/* ========== LEFT COLUMN ========== */}
-            <div className="grid-left">
+            <div className="grid-1">
               {/* 1) 식물 사진 */}
               <div className="card plant-photo-card">
                 <img src="/basil.png" alt="plant" className="plant-photo" />
@@ -116,80 +131,58 @@ function PlantModal({ data, onClose }) {
             </div>
 
             {/* ========== MIDDLE COLUMN ========== */}
-            <div className="grid-middle">
-              {/* 1) 재배 시작 / 예상 수확 */}
-              <div className="card date-card-wrap">
-                <div className="date-item">
-                  <label>재배 시작</label>
-                  <span>{farm.started_at}</span>
-                </div>
-                <div className="date-item">
-                  <label>예상 수확일</label>
-                  <span>{farm.expected_harvest_at}</span>
+            <div className="grid-2">
+              <div className="sensor-status-top">
+                <WaterLevelCard value={current_sensor.water_level} />
+              </div>
+            </div>
+
+            <div className="grid-3">
+              <div className="grid-3-top">
+                {/* 4) 장치 작동 상태 */}
+                <div className="card actu-box">
+                  <ActuStatus
+                    logs={actuator_log}
+                    current_sensor={{ ...current_sensor, preset_step }}
+                  />
                 </div>
               </div>
-
               {/* 2) 프리셋 */}
               <div className="card preset-card">
                 <PresetInfo preset_step={preset_step} />
               </div>
-
-              {/* 3) 최근 활동 */}
-              <div className="card history-card">
-                <PlantHistoryCard
-                  history={[
-                    { type: "water", title: "물주기", date: "2024-12-08 15:30" },
-                    { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
-                    { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
-                    { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
-                  ]}
-                />
-              </div>
-
-              {/* 4) 장치 작동 상태 */}
-              <div className="card actu-card">
-                <ActuStatus
-                  logs={actuator_log}
-                  current_sensor={{ ...current_sensor, preset_step }}
-                />
-              </div>
             </div>
 
-            {/* ========== RIGHT COLUMN ========== */}
-            <div className="grid-right">
+            {/* 3) 최근 활동 */}
+            {/* <div className="card history-card">
+                  <PlantHistoryCard
+                    history={[
+                      { type: "water", title: "물주기", date: "2024-12-08 15:30" },
+                      { type: "repot", title: "분갈이", date: "2024-12-05 12:10" },
+                      { type: "trim", title: "가지치기", date: "2024-12-03 09:50" },
+                      { type: "light", title: "LED 조정", date: "2024-12-02 18:44" },
+                    ]}
+                  />
+                </div> */}
+            <div className="grid-4">
               {/* 1) 센서 상태 요약 */}
-              <div className="card sensor-status-card">
-                <div className="sensor-status-top">
-                  <WaterLevelCard value={current_sensor.water_level} />
-                </div>
-
-                <div className="sensor-status-main">
-                  <SensorBar sensor={current_sensor} preset_step={preset_step} />
-                </div>
+              <div className="sensor-status-main">
+                <SensorBar sensor={current_sensor} preset_step={activeStep} />
               </div>
             </div>
           </div>
 
-          {/* 🔶 하단 — 최근 알람 */}
+          {/* 하단 — 최근 알람 */}
           <div className="card alarm-section-wide">
             <h3 className="section-title">최근 알람</h3>
 
-            <div className="alarm-list">
-              {plant_alarm.slice(0, 5).map((a) => (
-                <div key={a.p_alarm_id} className="alarm-item">
-                  <strong>{a.title}</strong>
-                  <p>{a.message}</p>
-                  <span className="alarm-time">{a.created_at}</span>
-                </div>
-              ))}
+            <div className="alarm-2grid">
+              <AlertSection plant_alarm={plant_alarm} />
             </div>
-
-            <button className="more-btn">더보기</button>
           </div>
 
           {/* 🔶 FOOTER 버튼 */}
           <div className="modal-actions">
-            <button className="action-btn green">편집</button>
             <button
               className="action-btn blue"
               onClick={() =>
