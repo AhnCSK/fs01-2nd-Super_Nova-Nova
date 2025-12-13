@@ -2,6 +2,8 @@
 const requests = {
   myPageView: "/mypage/view",
   myPageEdit: "/mypage/edit",
+  novaList: "/nova/list",
+  farmCardList: "/farm/list",
 };
 
 export default requests;

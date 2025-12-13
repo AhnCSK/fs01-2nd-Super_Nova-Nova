@@ -17,6 +17,15 @@ export function AuthProvider({ children }) {
       email: "admin@test.com",
       role: "ADMIN",
     },
+    {
+      id: "user",
+      userId: 4,
+      pw: "1234",
+      name: "사용자",
+      phone: "010-0000-0000",
+      email: "user@test.com",
+      role: "USER",
+    },
   ]);
 
   // 회원가입
@@ -41,7 +50,9 @@ export function AuthProvider({ children }) {
   const logout = () => setUser(null);
 
   return (
-    <AuthContext.Provider value={{ user, signup, login, logout, users, setUsers }}>
+    <AuthContext.Provider
+      value={{ user, signup, login, logout, users, setUsers }}
+    >
       {children}
     </AuthContext.Provider>
   );
