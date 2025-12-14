@@ -20,7 +20,7 @@ spring:
     username: sample
     password: 1234
 
-  #    password: tnalsdlchlrhdi!
+#    password: tnalsdlchlrhdi!
 
   sql:
     init:
@@ -52,4 +52,4 @@ spring:
 solapi:
   api-key:  # 빈칸처리
   api-secret:  # 빈칸처리
-  from-number:    # 발신번호 인증한 번호, 빈칸처리
+  from-number:  # 발신번호 인증한 번호, 빈칸처리
