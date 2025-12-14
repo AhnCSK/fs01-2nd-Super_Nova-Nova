@@ -32,7 +32,7 @@ public class FarmEntity {
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_id", nullable = false)
-    private PresetStepEntity presetStepEntity;
+    private PresetStepEntity presetStep;
 
     @CreationTimestamp
     private Timestamp createdTime;
@@ -40,10 +40,10 @@ public class FarmEntity {
     private Timestamp updateTime;
 
     @Builder
-    public FarmEntity(String farmName, int slot, NovaEntity nova, PresetStepEntity presetStepEntity) {
+    public FarmEntity(String farmName, int slot, NovaEntity nova, PresetStepEntity presetStep) {
         this.farmName = farmName;
         this.slot = slot;
         this.nova = nova;
-        this.presetStepEntity = presetStepEntity;
+        this.presetStep = presetStep;
     }
 }
