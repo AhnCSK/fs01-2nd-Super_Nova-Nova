@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TimelapseRequestDTO {
-    private int farmId;
-    private int stepId;
+    private long farmId;
+    private long stepId;
     private String timelapseName;
     private int fps;
     private int duration;

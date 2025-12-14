@@ -5,6 +5,7 @@ import com.nova.backend.farm.dto.FarmResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import com.nova.backend.farm.entity.FarmEntity;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class FarmServiceImpl implements FarmService{
     private final ModelMapper mapper;
 
     @Override
-    public List<FarmResponseDTO> getFarmListByNovaId(int novaId) {
+    public List<FarmResponseDTO> getFarmListByNovaId(Long novaId) {
         return farmDAO.findFarmsPresetStepsByNovaId(novaId).stream()
                 .map(farm -> mapper.map(farm,FarmResponseDTO.class))
                 .toList();

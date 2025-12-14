@@ -2,7 +2,7 @@ package com.nova.backend.timelapse.service;
 
 import com.nova.backend.farm.dao.FarmDAO;
 import com.nova.backend.farm.repository.FarmRepository;
-import com.nova.backend.preset.entity.PresetStep;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import com.nova.backend.preset.repository.PresetRepository;
 import com.nova.backend.preset.repository.PresetStepRepository;
 import com.nova.backend.timelapse.dao.TimelapseDAO;
@@ -14,7 +14,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import com.nova.backend.farm.Entity.Farm;
+import com.nova.backend.farm.entity.FarmEntity;
 
 
 import java.util.List;
@@ -53,11 +53,11 @@ public class TimelapseServiceImpl implements TimelapseService {
         List<TimelapseEntity> entityList = timelapseRequestDTOList.stream()
                 .map(dto -> {
 
-                    Farm farm = farmRepository.findById(dto.getFarmId())
+                    FarmEntity farm = farmRepository.findById(dto.getFarmId())
                             .orElseThrow(() -> new IllegalArgumentException(
                                     "존재하지 않는 farmId: " + dto.getFarmId()));
 
-                    PresetStep step = presetStepRepository.findById(dto.getStepId())
+                    PresetStepEntity step = presetStepRepository.findById(dto.getStepId())
                             .orElseThrow(() -> new IllegalArgumentException(
                                     "존재하지 않는 stepId: " + dto.getStepId()));
 

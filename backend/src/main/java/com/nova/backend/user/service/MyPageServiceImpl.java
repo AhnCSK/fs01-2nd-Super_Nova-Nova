@@ -1,7 +1,6 @@
 package com.nova.backend.user.service;
 
 import com.nova.backend.farm.dao.FarmDAO;
-import com.nova.backend.farm.Entity.Farm;
 import com.nova.backend.farm.dto.FarmResponseDTO;
 import com.nova.backend.nova.dao.NovaDAO;
 import com.nova.backend.nova.dto.NovaRequestDTO;
@@ -36,19 +35,47 @@ public class MyPageServiceImpl implements MyPageService {
     private final ModelMapper modelMapper;
 
     @Override
-    public MyPageResponseDTO findByUserId(int userId) {
-        UsersResponseDTO usersResponseDTO = modelMapper.map(usersDAO.findByUserId(userId), UsersResponseDTO.class);
-        List<NovaResponseDTO> novaResponseDTOList = novaDAO.getNovaEntity(userId).stream()
-                .map(nova -> modelMapper.map(nova, NovaResponseDTO.class))
-                .collect(Collectors.toList());
-        MyPageResponseDTO myPageResponseDTO = new MyPageResponseDTO(usersResponseDTO, novaResponseDTOList);
-        return myPageResponseDTO;
+    public MyPageResponseDTO findByUserId(Long userId) {
+
+        // 1) 유저 조회
+        UsersEntity user = usersDAO.findByUserId(userId);
+        if (user == null) {
+            throw new IllegalArgumentException("존재하지 않는 유저입니다. userId=" + userId);
+        }
+
+        // 2) user → DTO (여긴 문제 없음)
+        UsersResponseDTO usersResponseDTO =
+                modelMapper.map(user, UsersResponseDTO.class);
+
+        // 3) nova → DTO (충돌 나는 부분만 수동 처리)
+        List<NovaResponseDTO> novaResponseDTOList =
+                novaDAO.getNovaEntity(user).stream()
+                        .map(nova -> {
+                            NovaResponseDTO dto = new NovaResponseDTO();
+
+                            dto.setNovaId(nova.getNovaId());
+                            dto.setNovaSerialNumber(nova.getNovaSerialNumber());
+                            dto.setStatus(nova.getStatus());
+
+                            // 🔥 핵심: 어떤 userId를 쓸지 명확히 지정
+                            dto.setUserId(nova.getUser().getUserId());
+                            // 또는
+                            // dto.setUserId(String.valueOf(nova.getUser().getUserId()));
+
+                            return dto;
+                        })
+                        .collect(Collectors.toList());
+
+        return new MyPageResponseDTO(usersResponseDTO, novaResponseDTOList);
     }
 
     @Override
     public void updateMyPage(MyPageRequestDTO myPageRequestDTO) {
         UsersRequestDTO usersRequestDTO = myPageRequestDTO.getUsersRequestDTO();
-        UsersEntity usersEntity = usersDAO.findByUserId(myPageRequestDTO.getUsersRequestDTO().getUserId());
+        UsersEntity usersEntity = usersDAO.findByUserId(usersRequestDTO.getUserId());
+        if (usersEntity == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
         modelMapper.map(usersRequestDTO, usersEntity);
         usersDAO.update(usersEntity);
 
@@ -68,11 +95,17 @@ public class MyPageServiceImpl implements MyPageService {
         List<NovaEntity> novaEntityCreateList = novaRequestDTOList.stream()
                 .filter(nova -> nova.getStatus().equals("create"))
                 .map(nova -> {
-                    NovaEntity entity = new NovaEntity(
-                            nova.getUserId(),
-                            nova.getNovaSerialNumber(),
-                            "default"
-                    );
+//                    NovaEntity entity = new NovaEntity(
+//                            nova.getUserId(),
+//                            nova.getNovaSerialNumber(),
+//                            "default"
+//                    );
+//                    return entity;
+                    //노바에 user fk설정으로 변경햇습니당
+                    NovaEntity entity = new NovaEntity();
+                    entity.setUser(usersEntity);   // (userId ❌, UsersEntity ⭕)
+                    entity.setNovaSerialNumber(nova.getNovaSerialNumber());
+                    entity.setStatus("default");
                     return entity;
                 })
                 .collect(Collectors.toList());
@@ -90,7 +123,7 @@ public class MyPageServiceImpl implements MyPageService {
 
 
 
-        List<Farm> farmEntityList = farmDAO.findListByNovaId(userId);
+//        List<Farm> farmEntityList = farmDAO.findListByNovaId(userId);
 
 //        Map<Integer, List<NovaResponseDTO>> farmsByNova =
 //                farmDAO.findListByNovaId(userId).stream()
@@ -101,7 +134,8 @@ public class MyPageServiceImpl implements MyPageService {
 
 
 
-        return farmEntityList.stream().map(entity -> modelMapper.map(entity, FarmResponseDTO.class)).collect(Collectors.toList());
+//        return farmEntityList.stream().map(entity -> modelMapper.map(entity, FarmResponseDTO.class)).collect(Collectors.toList());
+        return null;
     }
 
     public List<TimelapseResponseDTO> getByFarm(int farmId) {

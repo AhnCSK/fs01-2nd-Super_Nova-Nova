@@ -1,7 +1,7 @@
 package com.nova.backend.timelapse.entity;
 
-import com.nova.backend.farm.Entity.Farm;
-import com.nova.backend.preset.entity.PresetStep;
+import com.nova.backend.farm.entity.FarmEntity;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,10 +21,10 @@ public class TimelapseEntity {
     private int settingId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "farm_id", nullable = false)
-    private Farm farmEntity;
+    private FarmEntity farmEntity;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "step_id", nullable = false)
-    private PresetStep presetStepEntity;
+    private PresetStepEntity presetStepEntity;
     @Column(nullable = false)
     private String timelapseName;
     @Column(nullable = false)

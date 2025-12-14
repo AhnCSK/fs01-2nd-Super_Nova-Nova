@@ -12,7 +12,6 @@ import com.nova.backend.user.service.MyPageService;
 import com.nova.backend.user.service.MyPageServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.nova.backend.farm.Entity.Farm;
 
 import java.util.List;
 
@@ -25,8 +24,8 @@ public class MyPageController {
     private final MyPageServiceImpl myPageServiceImpl;
 
     @GetMapping("/view")
-    public MyPageResponseDTO findByUserId(@RequestParam("userId") String userId) {
-        return myPageService.findByUserId(Integer.parseInt(userId));
+    public MyPageResponseDTO findByUserId(@RequestParam("userId") Long userId) {
+        return myPageService.findByUserId(userId);
     }
 
     @PostMapping("/edit")
