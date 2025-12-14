@@ -1,0 +1,48 @@
+package com.nova.backend.sensor.entity;
+
+import com.nova.backend.dashboard.entity.FarmEntity;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "sensor_log")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class SensorLogEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "log_id")
+    private Long logId;
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "farm_id", nullable = false)
+    private FarmEntity farm; //sensorLog:farm - N:1
+
+    @Column(name = "record_time", nullable = false)
+    private LocalDateTime recordTime;
+
+    @Column(nullable = false)
+    private Float temp;
+
+    @Column(nullable = false)
+    private Float humidity;
+
+    @Column(name = "lightPower", nullable = false)
+    private Float lightPower;
+
+    @Column(nullable = false)
+    private Float co2;
+
+    @Column(name = "soil_moisture", nullable = false)
+    private Float soilMoisture;
+
+    @Column(name = "water_level", nullable = false)
+    private Float waterLevel;
+}
