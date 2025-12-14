@@ -1,6 +1,6 @@
 import api from "./api"; // npm install axios
 import userRequest from "./userRequest";
-// 백엔드로 요청을 만ㄷ는 파일
+// 백엔드로 요청을 만드는 파일
 
 //   1. 회원가입 API
 export const signupAPI = async (payload) => {

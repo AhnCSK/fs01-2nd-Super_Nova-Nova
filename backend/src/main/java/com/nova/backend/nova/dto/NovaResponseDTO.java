@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class NovaResponseDTO {
     private int novaId;
-    private int userId;
+    private long userId;
     private String novaSerialNumber;
     private String status;
 }
