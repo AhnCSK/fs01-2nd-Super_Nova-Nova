@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface PresetDAO {
     void insertPreset(PresetEntity presetEntity);
-    List<PresetEntity> findPresetListByUserId(int userId);
+    List<PresetEntity> findPresetListByUserId(Long userId);
     void updatePreset();
     void deletePreset();
 }

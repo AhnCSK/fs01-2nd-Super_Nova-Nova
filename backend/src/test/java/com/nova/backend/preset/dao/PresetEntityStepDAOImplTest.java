@@ -3,6 +3,7 @@ package com.nova.backend.preset.dao;
 import com.nova.backend.preset.entity.EnvRange;
 import com.nova.backend.preset.entity.PresetEntity;
 import com.nova.backend.preset.entity.PresetStep;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import com.nova.backend.preset.repository.PresetRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class PresetEntityStepDAOImplTest {
         PresetEntity savedPresetEntity = presetRepository.save(presetEntity);
 
         // 2. Given: JSON 객체(EnvRange)를 포함한 Step 데이터 생성
-        PresetStep step = new PresetStep();
+        PresetStepEntity step = new PresetStepEntity();
         step.setPresetEntity(savedPresetEntity);
         step.setGrowthStep(1);
         step.setPeriodDays(10);
@@ -45,13 +46,13 @@ class PresetEntityStepDAOImplTest {
         step.setSoilMoisture(new EnvRange(30, 40));
 
         // 3. When: DAO를 통해 저장
-        PresetStep savedStep = presetStepDAO.save(step);
+        PresetStepEntity savedStep = presetStepDAO.save(step);
 
         // 4. Then: ID 생성 확인
         assertThat(savedStep.getStepId()).isNotZero();
 
         // 5. When: 다시 ID로 조회 (DB에서 잘 꺼내오는지)
-        PresetStep foundStep = presetStepDAO.findById(savedStep.getStepId()).orElseThrow();
+        PresetStepEntity foundStep = presetStepDAO.findById(savedStep.getStepId()).orElseThrow();
 
         // 6. Then: JSON 데이터가 객체로 잘 매핑되었는지 검증
         assertThat(foundStep.getTemp()).isNotNull();

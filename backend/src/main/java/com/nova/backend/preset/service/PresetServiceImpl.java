@@ -23,7 +23,7 @@ public class PresetServiceImpl implements PresetService{
     }
 
     @Override
-    public List<PresetResponseDTO> findPresetListByUserId(int userId) {
+    public List<PresetResponseDTO> findPresetListByUserId(Long userId) {
         List<PresetEntity> presetEntityListByUserId = presetDAO.findPresetListByUserId(userId);
 
         return presetEntityListByUserId.stream().map(preset -> mapper.map(preset,PresetResponseDTO.class))

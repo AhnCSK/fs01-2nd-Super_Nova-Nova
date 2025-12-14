@@ -1,10 +1,13 @@
 package com.nova.backend.preset.repository;
 
-import com.nova.backend.preset.entity.PresetStep;
+import com.nova.backend.preset.entity.PresetEntity;
+import com.nova.backend.preset.entity.PresetStepEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface PresetStepRepository extends JpaRepository<PresetStep, Integer> {
-    List<PresetStep> findByPresetEntity_PresetId(int presetId);
+// 현재 적용 단계 조회( 팜마다 )
+public interface PresetStepRepository extends JpaRepository<PresetStepEntity,Long> {
+    List<PresetStepEntity> findByPreset(PresetEntity preset);
+    List<PresetStepEntity> findByPreset_PresetId(int presetId);
 }

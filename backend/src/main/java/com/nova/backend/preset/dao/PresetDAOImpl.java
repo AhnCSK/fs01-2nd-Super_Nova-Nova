@@ -17,8 +17,8 @@ public class PresetDAOImpl implements PresetDAO {
     }
 
     @Override
-    public List<PresetEntity> findPresetListByUserId(int userId) {
-        return presetRepository.findByUserIdOrUserIdIsNull(userId);
+    public List<PresetEntity> findPresetListByUserId(Long userId) {
+        return presetRepository.findCustomOrSystemPresets(userId);
     }
 
     @Override

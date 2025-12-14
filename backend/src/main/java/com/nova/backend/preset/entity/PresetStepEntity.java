@@ -12,12 +12,12 @@ import org.hibernate.annotations.Type;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-public class PresetStep {
+public class PresetStepEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int stepId;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "preset_id")
-    private PresetEntity presetEntity;
+    private PresetEntity preset;
     private int growthStep;
     private int periodDays;
 

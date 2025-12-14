@@ -11,7 +11,7 @@ import java.util.List;
 public class NovaDAOImpl implements NovaDAO {
     private final NovaRepository novaRepository;
     @Override
-    public List<NovaEntity> getNovaEntity(int userId) {
+    public List<NovaEntity> getNovaEntity(Long userId) {
         return novaRepository.findByUser_UserId(userId);
     }
 

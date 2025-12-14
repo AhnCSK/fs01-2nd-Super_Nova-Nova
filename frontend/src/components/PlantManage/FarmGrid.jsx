@@ -15,7 +15,7 @@ export function FarmGrid({
     <div className={styles["farm-grid-container"]}>
       <div className={styles["farm-grid"]}>
         {slots.map((index) => {
-          const isFarm = farms.find((f) => f.location === index);
+          const isFarm = farms.find((f) => f.slot === index);
 
           if (isFarm) {
             return (

@@ -14,7 +14,7 @@ import java.util.List;
 public class PresetController {
     private final PresetService presetService;
     @GetMapping("/list")
-    public List<PresetResponseDTO> getPresetListByUserId(@RequestParam("userId") int userId){
+    public List<PresetResponseDTO> getPresetListByUserId(@RequestParam("userId") Long userId){
         return presetService.findPresetListByUserId(userId);
     }
 }

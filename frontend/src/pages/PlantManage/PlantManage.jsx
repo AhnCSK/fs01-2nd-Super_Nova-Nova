@@ -67,7 +67,7 @@ function PlantManage() {
           // 첫 번째 기기의 Farm 리스트를 가져와 팜카드로 보여주기
           const farmData = await getFarmList(novaData[0].novaId);
           setFarmList(farmData);
-          // console.log("Farm List:", farmData);
+          console.log("Farm List:", farmData);
         }
       } catch (e) {
         console.error("데이터 로딩 중 에러:", e);
