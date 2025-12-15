@@ -27,3 +27,11 @@ export const getPresetList = async(id)=>{
   });
   return response.data;
 }
+export const getPresetStepList = async(id)=>{
+  const response = await backendServer.get(requests.presetStep, {
+    params: {
+      presetId: id,
+    },
+  });
+  return response.data;
+}

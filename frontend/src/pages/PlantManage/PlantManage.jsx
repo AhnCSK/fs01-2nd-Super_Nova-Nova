@@ -148,7 +148,7 @@ function PlantManage() {
       )}
 
       {isFarmCreateOpen && (
-        <FarmCreateModal
+        <FarmCreateModal user={user}
           onClose={() => setIsFarmCreateOpen(false)}
           onCreate={controlNextStep}
         />

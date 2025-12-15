@@ -8,6 +8,7 @@ const requests = {
   timelapseCreate: "/timelapse/create",
   timelapseInfo: "/timelapse/info",
   presetList: "/preset/list", 
+  presetStep: "/preset/step",
 };
 
 export default requests;
