@@ -6,8 +6,11 @@ const requests = {
   farmCardList: "/farm/list",
   myPageTimelapse: "/mypage/timelapse",
   timelapseCreate: "/timelapse/create",
+  timelapseInfo: "/timelapse/info",
+  presetList: "/preset/list", 
+  presetStep: "/preset/step",
+  farmCreate: "/farm/create",
   timelapseView: "/timelapse/view",
-  presetList: "/preset/list",
 };
 
 export default requests;
