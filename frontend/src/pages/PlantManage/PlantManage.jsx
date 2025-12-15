@@ -1,21 +1,17 @@
-import { useEffect, useState, useCallback } from "react";
+import {useEffect, useState, useCallback} from "react";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
 import farmFullData from "../../api/mockDatas/farmFullData";
-import { useAuth } from "../../api/auth/AuthContext";
-import { FarmGrid } from "../../components/PlantManage/FarmGrid";
-import { FarmCreateModal } from "../../components/PlantManage/FarmCreateModal";
+import {useAuth} from "../../api/auth/AuthContext";
+import {FarmGrid} from "../../components/PlantManage/FarmGrid";
+import {FarmCreateModal} from "../../components/PlantManage/FarmCreateModal";
 import TimeLapseModal from "../../components/TimeLapse/TimeLapseModal";
-import { TimeCreateModal } from "../../components/TimeLapse/TimeCreateModal";
-import {
-  createFarm,
-  getFarmList,
-  getNovaList,
-} from "../../api/PlantManage/plantsAPI";
+import {TimeCreateModal} from "../../components/TimeLapse/TimeCreateModal";
+import {createFarm, getFarmList, getNovaList} from "../../api/PlantManage/plantsAPI";
 
 function PlantManage() {
   // 🔥 로그인 정보 가져오기
-  const { user } = useAuth();
+  const {user} = useAuth();
 
   // 페이지에 보여지는 Nova List 정보
   const [novaList, setNovaList] = useState([]);
@@ -42,10 +38,7 @@ function PlantManage() {
         <div className="need-login-box">
           <h2>로그인이 필요합니다</h2>
           <p>내 식물 관리는 로그인한 사용자만 이용할 수 있어요.</p>
-          <button
-            className="login-go-btn"
-            onClick={() => (window.location.href = "/login")}
-          >
+          <button className="login-go-btn" onClick={() => (window.location.href = "/login")}>
             로그인 하러 가기 →
           </button>
         </div>
@@ -102,6 +95,7 @@ function PlantManage() {
   // 팜 생성 → 타임랩스 생성 연결
   const controlNextStep = async (formData) => {
     try {
+      setNewFarm(formData);
       console.log(formData);
       const result = await createFarm(formData);
       console.log(result);
@@ -121,7 +115,7 @@ function PlantManage() {
   return (
     <div className="plants-page">
       <h1>내 식물 관리</h1>
-      <div className="nova-select-wrapper" style={{ marginBottom: "20px" }}>
+      <div className="nova-select-wrapper" style={{marginBottom: "20px"}}>
         <label htmlFor="nova-select">🌱 관리할 기기 선택:</label>
         <select
           id="nova-select"
@@ -154,9 +148,7 @@ function PlantManage() {
         }}
         onTimeLapse={setTimeLapseDetail}
       />
-      {selectedFarm && (
-        <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />
-      )}
+      {selectedFarm && <PlantModal data={selectedFarm} onClose={() => setSelectedFarm(null)} />}
 
       {isFarmCreateOpen && (
         <FarmCreateModal
@@ -180,10 +172,7 @@ function PlantManage() {
       )}
 
       {timeLapseDetail && (
-        <TimeLapseModal
-          farm={timeLapseDetail}
-          onClose={() => setTimeLapseDetail(null)}
-        />
+        <TimeLapseModal farm={timeLapseDetail} onClose={() => setTimeLapseDetail(null)} />
       )}
     </div>
   );
