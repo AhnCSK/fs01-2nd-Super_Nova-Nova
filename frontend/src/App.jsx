@@ -1,15 +1,8 @@
 import { Routes, Route } from "react-router-dom";
-
-// =============================
-// 공통 CSS / 레이아웃
-// =============================
 import "./App.css";
 import BasicLayout from "./layouts/layout/BasicLayout";
 import Header from "./layouts/header/Header";
 
-// =============================
-// 팀장 페이지 영역
-// =============================
 import Home from "./pages/Home/Home";
 import PlantManage from "./pages/PlantManage/PlantManage";
 
@@ -18,29 +11,23 @@ import MyPageView from "./pages/MyPage/MyPageView";
 import MyPageEdit from "./pages/MyPage/MyPageEdit";
 import MyPageTimelapse from "./pages/MyPage/MyPageTimelapse";
 
-// =============================
-// 우영 로그인/회원가입 + 인증
-// =============================
-import { AuthProvider } from "./api/auth/AuthContext";
-
-// 로그인 / 회원가입
 import Login from "./pages/Login/Login";
 import Signup from "./pages/Login/Signup";
 
-// ID/PW 찾기
 import FindIdPw from "./pages/Login/FindIdPw";
 import IDFindPage from "./pages/Login/IDFindPage";
 import PWFindVerify from "./pages/Login/PWFindVerify";
 import PWFindReset from "./pages/Login/PWFindReset";
 
-// 테스트 & 관리자 페이지
 import TestHome from "./pages/Login/TestHome";
 import AdminHome from "./pages/Login/AdminHome";
 
-//usestate 써서 import 해보기
+// ✅ 여기
+import ProtectedRoute from "./api/auth/ProtectedRoute";
+
 function App() {
   return (
-    <AuthProvider>
+    <>
       <Header />
 
       <Routes>
@@ -54,18 +41,27 @@ function App() {
           }
         />
 
-        {/* 식물관리 */}
+        {/* 식물관리 (로그인 필수) */}
         <Route
           path="/plants"
           element={
-            <BasicLayout>
-              <PlantManage />
-            </BasicLayout>
+            <ProtectedRoute>
+              <BasicLayout>
+                <PlantManage />
+              </BasicLayout>
+            </ProtectedRoute>
           }
         />
 
-        {/* 마이페이지 */}
-        <Route path="/mypage" element={<MyPage />}>
+        {/* 마이페이지 (로그인 필수) */}
+        <Route
+          path="/mypage"
+          element={
+            <ProtectedRoute>
+              <MyPage />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<MyPageView />} />
           <Route path="view" element={<MyPageView />} />
           <Route path="edit" element={<MyPageEdit />} />
@@ -82,12 +78,11 @@ function App() {
         <Route path="/find/pw/verify" element={<PWFindVerify />} />
         <Route path="/find/pw/reset" element={<PWFindReset />} />
 
-        {/* 테스트 페이지 */}
+        {/* 테스트 / 관리자 */}
         <Route path="/wootest" element={<TestHome />} />
-        {/* 🔥 관리자 로그인 / 관리자 페이지 */}
         <Route path="/admin" element={<AdminHome />} />
       </Routes>
-    </AuthProvider>
+    </>
   );
 }
 
