@@ -1,4 +1,8 @@
 import { Routes, Route } from "react-router-dom";
+
+// =============================
+// 공통 CSS / 레이아웃
+// =============================
 import "./App.css";
 import BasicLayout from "./layouts/layout/BasicLayout";
 import Header from "./layouts/header/Header";
@@ -21,6 +25,7 @@ import PWFindReset from "./pages/Login/PWFindReset";
 
 import TestHome from "./pages/Login/TestHome";
 import AdminHome from "./pages/Login/AdminHome";
+import AlarmPage from "./pages/Alerts/AlarmPage";
 
 // ✅ 여기
 import ProtectedRoute from "./api/auth/ProtectedRoute";
@@ -81,6 +86,15 @@ function App() {
         {/* 테스트 / 관리자 */}
         <Route path="/wootest" element={<TestHome />} />
         <Route path="/admin" element={<AdminHome />} />
+        {/* 알람관리 */}
+        <Route
+          path="/alarm"
+          element={
+            <BasicLayout>
+              <AlarmPage />
+            </BasicLayout>
+          }
+        />
       </Routes>
     </>
   );

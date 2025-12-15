@@ -1,11 +1,11 @@
 import {useNavigate, useOutletContext} from "react-router-dom";
 import {useEffect, useState} from "react";
 import "./MyPage.css"; // 기존 CSS 유지
-// import {updateUserInfo} from "../../api/mypage/mypageAPI";
+import {updateUserInfo, myPageCheckPassword} from "../../api/mypage/mypageAPI";
 
 function MyPageEdit() {
   const navigate = useNavigate();
-  const {userInfo, setUserInfo} = useOutletContext();
+  const {userInfo, setUserInfo, novaList, setNovaList} = useOutletContext();
 
   // 🔹 사용자 정보 (usersResponseDTO 그대로)
   const [editUser, setEditUser] = useState(null);
@@ -18,30 +18,45 @@ function MyPageEdit() {
   // 🔹 비밀번호 확인 모달
   const [showPasswordModal, setShowPasswordModal] = useState(true);
   const [passwordInput, setPasswordInput] = useState("");
+  const [passwordCheckLoading, setPasswordCheckLoading] = useState(false);
 
   /** 부모에서 받은 API 데이터 그대로 복사 */
   useEffect(() => {
     if (!userInfo) return;
 
-    setEditUser({...userInfo.usersResponseDTO});
+    setEditUser(userInfo);
     setEditNovaList(
-      userInfo.novaResponseDTOList.map((nova) => ({
+      novaList.map((nova) => ({
         ...nova,
-        status: "default", // 기본 상태
+        status: "default",
       }))
     );
-  }, [userInfo]);
-
-  /** 아직 데이터 준비 안 됐으면 렌더링 중단 */
-  if (!editUser) return null;
+  }, [userInfo, novaList]);
 
   /** 비밀번호 확인 */
-  const handlePasswordCheck = () => {
-    if (passwordInput === editUser.password) {
-      setShowPasswordModal(false);
-    } else {
-      alert("비밀번호가 틀렸습니다.");
-      setPasswordInput("");
+  const handlePasswordCheck = async () => {
+    if (!passwordInput.trim()) {
+      alert("비밀번호를 입력해주세요.");
+      return;
+    }
+
+    try {
+      setPasswordCheckLoading(true);
+      const response = await myPageCheckPassword({
+        userId: editUser.userId,
+        password: passwordInput,
+      });
+      if (response.data === true) {
+        setShowPasswordModal(false); // 확인 성공 시 폼 보여주기
+      } else {
+        alert("비밀번호가 틀렸습니다.");
+        setPasswordInput("");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("비밀번호 확인 중 오류가 발생했습니다.");
+    } finally {
+      setPasswordCheckLoading(false);
     }
   };
 
@@ -82,14 +97,14 @@ function MyPageEdit() {
 
     updateUserInfo(editUserInfo);
 
+    // ✅ 부모 userInfo 수정
     setUserInfo((prev) => ({
       ...prev,
-      usersResponseDTO: {
-        ...prev.usersResponseDTO,
-        ...editUser, // 수정된 필드만 덮어쓰기
-      },
-      novaResponseDTOList: editNovaList, // 필요 시
+      ...editUser,
     }));
+
+    // ✅ 부모 novaList 수정 (delete 제외)
+    setNovaList(editNovaList.filter((nova) => nova.status !== "delete"));
 
     alert("정보가 수정되었습니다.");
     navigate("/mypage");
@@ -143,7 +158,7 @@ function MyPageEdit() {
               className="edit-input"
               type="password"
               placeholder="새 비밀번호 입력"
-              value={editUser.password || ""}
+              // value={editUser.password || ""}
               onChange={(e) => setEditUser({...editUser, password: e.target.value})}
             />
           </div>
