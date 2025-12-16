@@ -1,5 +1,6 @@
 package com.nova.backend.sensor.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nova.backend.actuator.service.ActuatorService;
 import com.nova.backend.alarm.service.AlarmService;
@@ -28,6 +29,20 @@ public class SensorServiceImpl implements SensorService {
     private final ModelMapper modelMapper;
     private final AlarmService alarmService;
     private final ActuatorService actuatorService;
+    private final ObjectMapper objectMapper;
+
+    @Override
+    @Transactional
+    public void controlSensorData(String payload, String novaSerialNumber, int slot) throws JsonProcessingException {
+        //novaNumber랑 slot을 통해 farm Entity를 찾아오는 메서드 구현 -> return farm
+        //farm을 payload에 추가하고, 해당 payload를 SensorEntity로 mapper
+        FarmEntity farm = farmRepository.findByNova_NovaSerialNumberAndSlot(novaSerialNumber, slot)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Farm"));
+        SensorCurrentDTO sensorDTO = objectMapper.readValue(payload, SensorCurrentDTO.class);
+        SensorLogEntity sensorLog = modelMapper.map(sensorDTO, SensorLogEntity.class);
+        sensorLog.setFarm(farm);
+        saveSensorLog(sensorLog);
+    }
 
     @Override
     @Transactional

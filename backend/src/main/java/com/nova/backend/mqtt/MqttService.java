@@ -4,6 +4,7 @@ import com.nova.backend.timelapse.dao.TimelapseDAO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nova.backend.sensor.entity.SensorLogEntity;
 import com.nova.backend.sensor.service.SensorService;
+import com.nova.backend.timelapse.service.TimelapseService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.integration.annotation.ServiceActivator;
