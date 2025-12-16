@@ -91,9 +91,11 @@ function App() {
         <Route
           path="/alarm"
           element={
-            <BasicLayout>
-              <AlarmPage />
-            </BasicLayout>
+            <ProtectedRoute>
+              <BasicLayout>
+                <AlarmPage />
+              </BasicLayout>
+            </ProtectedRoute>
           }
         />
       </Routes>
