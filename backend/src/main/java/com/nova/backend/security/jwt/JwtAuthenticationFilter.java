@@ -21,6 +21,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final CustomUserDetailsService userDetailsService;
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String uri = request.getRequestURI();
+
+        return uri.equals("/api/users/login")
+                || uri.equals("/api/users/signup")
+                || uri.startsWith("/api/users/email");
+    }
 
     @Override
     protected void doFilterInternal(
