@@ -1,5 +1,6 @@
 package com.nova.backend.mqtt;
 
+import com.nova.backend.timelapse.dao.TimelapseDAO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nova.backend.sensor.entity.SensorLogEntity;
 import com.nova.backend.sensor.service.SensorService;
@@ -9,12 +10,14 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
-
 @Service
 @RequiredArgsConstructor
 public class MqttService {
     private final MyPublisher publisher;
+    private final TimelapseService timelapseService;
     private final SensorService sensorService;
+
+    int count=0;
     @ServiceActivator(inputChannel = "mqttInputChannel")
     public void handleMessage(Message<String> message) {
         // 메시지 페이로드(내용)
@@ -32,6 +35,18 @@ public class MqttService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+        try {
+            if (topic.startsWith("home/timelapse/photo/")) {
+                long settingId = Long.parseLong(topic.substring("home/timelapse/photo/".length()));
+                timelapseService.saveImage(settingId, payload);
+
+            } else if (topic.startsWith("home/timelapse/done/")) {
+                long settingId = Long.parseLong(topic.substring("home/timelapse/done/".length()));
+                timelapseService.completeStep(settingId);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
 //        if(count%3==0){
@@ -41,7 +56,7 @@ public class MqttService {
 //        }
     }
 //    private final MessageChannel mqttOutboundChannel;
-
+//
 //    public void publish(String topic, String payload) {
 //        Message<String> message = MessageBuilder.withPayload(payload)
 //                .setHeader(MqttHeaders.TOPIC, topic)
