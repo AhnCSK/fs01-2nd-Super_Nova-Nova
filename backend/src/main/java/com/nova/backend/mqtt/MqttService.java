@@ -10,6 +10,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.stereotype.Service;
+import com.nova.backend.timelapse.service.TimelapseService;
 @Service
 @RequiredArgsConstructor
 public class MqttService {
