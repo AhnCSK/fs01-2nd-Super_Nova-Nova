@@ -1,7 +1,7 @@
 package com.nova.backend.sensor.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nova.backend.actuator.service.ActuatorService;
 import com.nova.backend.alarm.service.AlarmService;
 import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.farm.repository.FarmRepository;
@@ -26,8 +26,21 @@ public class SensorServiceImpl implements SensorService {
     private final SensorLogDAO sensorLogDAO;
     private final FarmRepository farmRepository;
     private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper;
     private final AlarmService alarmService;
-    private final ActuatorService actuatorService;
+
+    @Override
+    @Transactional
+    public void controlSensorData(String payload, String novaSerialNumber, int slot) throws JsonProcessingException {
+        //novaNumber랑 slot을 통해 farm Entity를 찾아오는 메서드 구현 -> return farm
+        //farm을 payload에 추가하고, 해당 payload를 SensorEntity로 mapper
+        FarmEntity farm = farmRepository.findByNova_NovaSerialNumberAndSlot(novaSerialNumber, slot)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Farm"));
+        SensorCurrentDTO sensorDTO = objectMapper.readValue(payload, SensorCurrentDTO.class);
+        SensorLogEntity sensorLog = modelMapper.map(sensorDTO, SensorLogEntity.class);
+        sensorLog.setFarm(farm);
+        saveSensorLog(sensorLog);
+    }
 
     @Override
     @Transactional
@@ -35,8 +48,6 @@ public class SensorServiceImpl implements SensorService {
         if (sensorLog == null || sensorLog.getFarm() == null) {
             throw new IllegalArgumentException("SensorLog 또는 Farm 정보가 없습니다.");
         }
-        FarmEntity farm = farmRepository.findById(sensorLog.getFarm().getFarmId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 Farm"));
-        sensorLog.setFarm(farm);
         // 센서 로그값 저장
         sensorLogDAO.save(sensorLog);
         // 프리셋 기준 판단
@@ -169,30 +180,12 @@ public class SensorServiceImpl implements SensorService {
             );
         }
         // 광량
-        if (log.getLightPower() < step.getLightPower().getMin()) {
+        if (log.getLightPower() < step.getLightPower().getMin() || log.getLightPower() > step.getLightPower().getMax()) {
             alarmService.createSensorAlarm(
                     farm,
                     "SENSOR",
-                    "광량 부족",
-                    "광량이 기준보다 낮습니다. (현재 광량: " + log.getLightPower() + "%)"
-            );
-            actuatorService.controlBlind(
-                    farm.getFarmId(),
-                    "OPEN",
-                    log.getLightPower()
-            );
-        }
-        if (log.getLightPower() > step.getLightPower().getMax()) {
-            alarmService.createSensorAlarm(
-                    farm,
-                    "SENSOR",
-                    "광량 과다",
-                    "광량이 기준보다 높습니다. (현재 광량: " + log.getLightPower() + "%)"
-            );
-            actuatorService.controlBlind(
-                    farm.getFarmId(),
-                    "CLOSE",
-                    log.getLightPower()
+                    "광량 이상",
+                    "광량이 기준 범위를 벗어났습니다. (현재 광량: " + log.getLightPower() + "%)"
             );
         }
         // CO2
