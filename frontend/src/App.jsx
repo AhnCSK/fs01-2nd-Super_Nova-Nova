@@ -28,7 +28,6 @@ import TestHome from "./pages/Login/TestHome";
 import AdminHome from "./pages/Login/AdminHome";
 import AlarmPage from "./pages/Alerts/AlarmPage";
 
-// ✅ 여기
 import ProtectedRoute from "./api/auth/ProtectedRoute";
 
 function App() {

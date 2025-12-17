@@ -1,19 +1,12 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./FarmCreateModal.module.css";
-import {RangeSlider} from "../RangeSlider.jsx";
-import {getPresetList, getPresetStepList} from "../../api/PlantManage/plantsAPI.jsx";
+import { RangeSlider } from "../RangeSlider.jsx";
+import { getPresetList, getPresetStepList } from "../../api/PlantManage/plantsAPI.jsx";
 
 // --- [Icons] Simple SVG Icons to replace Lucide ---
 const Icons = {
   Close: () => (
-    <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 6L6 18M6 6l12 12" />
     </svg>
   ),
@@ -26,14 +19,7 @@ const Icons = {
     </svg>
   ),
   Plus: () => (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M12 5v14M5 12h14" />
     </svg>
   ),
@@ -43,26 +29,12 @@ const Icons = {
     </svg>
   ),
   ChevronDown: () => (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M6 9l6 6 6-6" />
     </svg>
   ),
   ChevronUp: () => (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    >
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
       <path d="M18 15l-6-6-6 6" />
     </svg>
   ),
@@ -70,61 +42,18 @@ const Icons = {
 
 // --- 프리셋 생성 시 나오는 트랙바 초기 데이터 값 ---
 const DEFAULT_ENV = {
-  temp: {min: 20, max: 25},
-  humidity: {min: 50, max: 70},
-  co2: {min: 400, max: 800},
-  soilMoisture: {min: 40, max: 60},
-  lightPower: {min: 50, max: 80},
+  temp: { min: 20, max: 25 },
+  humidity: { min: 50, max: 70 },
+  co2: { min: 400, max: 800 },
+  soilMoisture: { min: 40, max: 60 },
+  lightPower: { min: 50, max: 80 },
   waterLevel: 3,
 };
-// --- 기존에 저장되어 불러온 프리셋 정보
-const MOCK_PRESETS = [
-  {
-    presetId: "1",
-    plantType: "청상추",
-    name: "김농부",
-    presetName: "청상추 프리셋",
-    stages: [
-      {
-        id: 101,
-        name: "0",
-        environment: {
-          ...DEFAULT_ENV,
-          temperature: {min: 18, max: 22},
-        },
-      },
-      {
-        id: 102,
-        name: "1",
-        environment: {
-          ...DEFAULT_ENV,
-          temperature: {min: 20, max: 24},
-        },
-      },
-    ],
-  },
-  {
-    presetId: "2",
-    plantType: "설향 딸기",
-    name: "박마트",
-    presetName: "스마트팜 프리셋",
-    stages: [
-      {
-        id: 201,
-        name: "0",
-        environment: {
-          ...DEFAULT_ENV,
-          temperature: {min: 15, max: 20},
-        },
-      },
-    ],
-  },
-];
 
 // --- [Main Component] ---
-export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
+export const FarmCreateModal = ({ user, nova, slot, onClose, onCreate }) => {
   const [farmName, setFarmName] = useState(""); // 입력한 팜 이름
-  const [presetList, setPresetList] = useState(MOCK_PRESETS);
+  const [presetList, setPresetList] = useState([]);
 
   // 프리셋 관련 state
   const [selectedPreset, setSelectedPreset] = useState(null); // 기존 프리셋 선택
@@ -240,7 +169,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
         stage.stepId === stageId
           ? {
               ...stage,
-              [key]: {min, max},
+              [key]: { min, max },
             }
           : stage
       )
@@ -249,12 +178,10 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
 
   // 핸들러: 단계 이름 변경
   const updateStageName = (stageId, e) => {
-    const {name, value} = e.target;
+    const { name, value } = e.target;
 
     const onlyNumbers = value.replace(/[^0-9]/g, "");
-    setStepList(
-      stepList.map((stage) => (stage.stepId === stageId ? {...stage, [name]: onlyNumbers} : stage))
-    );
+    setStepList(stepList.map((stage) => (stage.stepId === stageId ? { ...stage, [name]: onlyNumbers } : stage)));
   };
   // 팜 생성 시 처리되는 메서드
   const handleSubmit = (e) => {
@@ -301,7 +228,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
         <div className={styles["modal-header"]}>
           <div className={styles["header-left"]}>
             <Icons.Sprout />
-            <h2 style={{margin: 0, fontSize: "1.25rem"}}>새로운 팜 생성</h2>
+            <h2 style={{ margin: 0, fontSize: "1.25rem" }}>새로운 팜 생성</h2>
           </div>
           <button className={styles["close-btn"]} onClick={onClose}>
             <Icons.Close />
@@ -315,7 +242,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
               <label className={styles["label"]}>기본 정보</label>
               <div>
                 {/* 팜 이름 입력*/}
-                <div style={{marginTop: "20px"}}>
+                <div style={{ marginTop: "20px" }}>
                   <label className={styles["label"]}>팜 이름</label>
                   <input
                     className={styles["input-field"]}
@@ -331,7 +258,6 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                     position: "relative",
                   }}
                 >
-                  {" "}
                   {/* relative: 리스트 위치 기준점 */}
                   <label className={styles["label"]}>식물 종류 프리셋 선택</label>
                   {/* 새로운 식물 만들기 (직접 입력) */}
@@ -393,10 +319,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                     /* 드롭다운 선택 모드 */
                     <>
                       {/* 초기 클릭 시 리스트 토글 */}
-                      <div
-                        className={styles["preset-selector-trigger"]}
-                        onClick={() => setIsOpen(!isOpen)}
-                      >
+                      <div className={styles["preset-selector-trigger"]} onClick={() => setIsOpen(!isOpen)}>
                         {selectedPreset ? (
                           /* 선택된 프리셋 정보 표시 */
                           <div className={styles["preset-item"]}>
@@ -428,7 +351,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           </span>
                         )}
                         {/* 화살표 아이콘 (열림/닫힘 표시) */}
-                        <span style={{color: "#94a3b8"}}>{isOpen ? "▲" : "▼"}</span>
+                        <span style={{ color: "#94a3b8" }}>{isOpen ? "▲" : "▼"}</span>
                       </div>
 
                       {/* 2. 드롭다운 리스트 (isOpen일 때만 보임) */}
@@ -489,14 +412,10 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
             {(selectedPreset || isCreatingNew) && (
               <div>
                 <div className={styles["stage-header-row"]}>
-                  <div className={styles["section-title"]} style={{margin: 0}}>
+                  <div className={styles["section-title"]} style={{ margin: 0 }}>
                     성장 단계 설정
                   </div>
-                  <button
-                    type="button"
-                    className={styles["add-stage-btn"]}
-                    onClick={addGrowthStage}
-                  >
+                  <button type="button" className={styles["add-stage-btn"]} onClick={addGrowthStage}>
                     <Icons.Plus /> 단계 추가
                   </button>
                 </div>
@@ -548,11 +467,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                             <Icons.Trash />
                           </button>
                         )}
-                        {stepOpen.includes(stage.stepId) ? (
-                          <Icons.ChevronUp />
-                        ) : (
-                          <Icons.ChevronDown />
-                        )}
+                        {stepOpen.includes(stage.stepId) ? <Icons.ChevronUp /> : <Icons.ChevronDown />}
                       </div>
                     </div>
 
@@ -577,9 +492,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           unit="%"
                           minValue={stage.humidity.min}
                           maxValue={stage.humidity.max}
-                          onChange={(min, max) =>
-                            updateEnvironment(stage.stepId, "humidity", min, max)
-                          }
+                          onChange={(min, max) => updateEnvironment(stage.stepId, "humidity", min, max)}
                         />
 
                         <RangeSlider
@@ -601,9 +514,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           unit="%"
                           minValue={stage.soilMoisture.min}
                           maxValue={stage.soilMoisture.max}
-                          onChange={(min, max) =>
-                            updateEnvironment(stage.stepId, "soilMoisture", min, max)
-                          }
+                          onChange={(min, max) => updateEnvironment(stage.stepId, "soilMoisture", min, max)}
                         />
 
                         <RangeSlider
@@ -614,9 +525,7 @@ export const FarmCreateModal = ({user, nova, slot, onClose, onCreate}) => {
                           unit="%"
                           minValue={stage.lightPower.min}
                           maxValue={stage.lightPower.max}
-                          onChange={(min, max) =>
-                            updateEnvironment(stage.stepId, "lightPower", min, max)
-                          }
+                          onChange={(min, max) => updateEnvironment(stage.stepId, "lightPower", min, max)}
                         />
                       </div>
                     )}

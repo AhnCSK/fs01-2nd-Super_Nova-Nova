@@ -46,6 +46,7 @@ public class SecurityConfig {
 
                         //  인증 없이 접근 허용
                         .requestMatchers(
+                                "/img/**",
                                 "/api/users/login",
                                 "/api/users/signup",
                                 "/api/users/check-loginid",

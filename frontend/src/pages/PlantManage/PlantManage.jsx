@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Navigate } from "react-router-dom";
 import "./PlantManage.css";
 import PlantModal from "./PlantModal";
@@ -7,8 +7,8 @@ import { useAuth } from "../../api/auth/AuthContext";
 import { FarmGrid } from "../../components/PlantManage/FarmGrid";
 import { FarmCreateModal } from "../../components/PlantManage/FarmCreateModal";
 import TimeLapseModal from "../../components/TimeLapse/TimeLapseModal";
+import { createFarm, getFarmList, getNovaList } from "../../api/PlantManage/plantsAPI";
 import { TimeCreateModal } from "../../components/TimeLapse/TimeCreateModal";
-import { getFarmList, getNovaList } from "../../api/PlantManage/plantsAPI";
 
 function PlantManage() {
   // 🔥 로그인 정보 가져오기
@@ -36,33 +36,35 @@ function PlantManage() {
     return <Navigate to="/plants/need-login" replace />;
   }
 
+  const fetchInitData = useCallback(async () => {
+    try {
+      console.log(user);
+
+      // Nova 리스트 가져오기
+      const novaData = await getNovaList(user.userId);
+      setNovaList(novaData);
+
+      let targetNova = selectedNova; // 현재 선택된 것 유지
+
+      // 만약 선택된 게 없거나(첫 로드), 리스트가 갱신되어 기존 선택이 유효하지 않다면 첫 번째 선택
+      if (!targetNova && novaData && novaData.length > 0) {
+        targetNova = novaData[0];
+        setSelectedNova(targetNova);
+      }
+
+      // 선택된 기기가 있다면 그 기기의 팜 리스트 갱신
+      if (targetNova) {
+        const farmData = await getFarmList(targetNova.novaId);
+        setFarmList(farmData);
+        console.log("Farm List 갱신 완료:", farmData);
+      }
+    } catch (e) {
+      console.error("데이터 로딩 중 에러:", e);
+    }
+  }, [user, selectedNova]); // user나 selectedNova가 바뀔 때 함수 갱신
+
   // API 호출 -> 유저 소유의 Nova List 호출
   useEffect(() => {
-    const fetchInitData = async () => {
-      console.log("Auth user 객체:", user);
-      console.log("userId 값:", user?.userId);
-      if (!user) return;
-
-      try {
-        // Nova 리스트 가져오기
-        const novaData = await getNovaList(user.userId);
-        setNovaList(novaData); // 화면 렌더링을 위해 State 업데이트 요청
-        console.log("Nova List:", novaData);
-
-        // 받아온 'novaData' 변수를 직접 사용하여 조건 검사
-        if (novaData && novaData.length > 0) {
-          setSelectedNova(novaData[0]);
-
-          // 첫 번째 기기의 Farm 리스트를 가져와 팜카드로 보여주기
-          const farmData = await getFarmList(novaData[0].novaId);
-          setFarmList(farmData);
-          console.log("Farm List:", farmData);
-        }
-      } catch (e) {
-        console.error("데이터 로딩 중 에러:", e);
-      }
-    };
-
     fetchInitData();
   }, [user]);
 
@@ -96,12 +98,8 @@ function PlantManage() {
 
   // 팜 생성 처리
   const handleCreateFarm = (farmData) => {
-    const newFarmData = {
-      slot: farmList.length + 1,
-      ...farmData,
-    };
-    setFarmList([...farmList, newFarmData]);
     setIsFarmCreateOpen(false);
+    fetchInitData();
   };
 
   return (
@@ -145,13 +143,22 @@ function PlantManage() {
       )}
 
       {isFarmCreateOpen && (
-        <FarmCreateModal onClose={() => setIsFarmCreateOpen(false)} onCreate={controlNextStep} />
+        <FarmCreateModal
+          user={user}
+          nova={selectedNova}
+          slot={newSlot}
+          onClose={() => setIsFarmCreateOpen(false)}
+          onCreate={controlNextStep}
+        />
       )}
 
       {isTimeLapseCreateOpen && (
         <TimeCreateModal
           farm={newFarm}
-          onClose={() => setIsTimeLapseCreateOpen(false)}
+          onClose={() => {
+            setIsTimeLapseCreateOpen(false);
+            fetchInitData();
+          }}
           onCreate={handleCreateFarm}
         />
       )}
