@@ -15,8 +15,8 @@ public class FarmDAOImpl implements FarmDAO{
     private final FarmRepository farmRepository;
     @Override
     public Optional<FarmEntity> save(FarmEntity farmEntity) {
-        farmRepository.save(farmEntity);
-        return farmRepository.findByNova_NovaSerialNumberAndSlot(farmEntity.getNova().getNovaSerialNumber(), farmEntity.getSlot());
+        FarmEntity savedFarm = farmRepository.save(farmEntity);
+        return Optional.ofNullable(savedFarm);
     }
 
     @Override

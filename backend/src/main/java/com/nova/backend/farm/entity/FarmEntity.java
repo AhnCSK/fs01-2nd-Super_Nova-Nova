@@ -14,6 +14,7 @@ import java.sql.Timestamp;
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 @ToString(exclude = {"nova","presetStep"})
 public class FarmEntity {
 
@@ -31,7 +32,7 @@ public class FarmEntity {
     private NovaEntity nova;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "step_id", nullable = false)
+    @JoinColumn(name = "step_id")
     private PresetStepEntity presetStep;
 
     @CreationTimestamp
