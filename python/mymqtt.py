@@ -37,22 +37,22 @@ class MqttWorker:
 
         # 센서 객체 생성 및 측정 스레드 시작(start)
         # dht: 온/습도, mcp: 토양/조도, water_level: 수위, co2: 이산화탄소
-        # self.dht = DHTSensor()
-        # self.dht.start()
-        # self.mcp = MCPSensor()
-        # self.mcp.start()
-        # self.water_level = UltrasonicSensor()
-        # self.water_level.start()
-        # self.co2 = CO2Sensor()
-        # self.co2.start()
+        self.dht = DHTSensor()
+        self.dht.start()
+        self.mcp = MCPSensor()
+        self.mcp.start()
+        self.water_level = UltrasonicSensor()
+        self.water_level.start()
+        self.co2 = CO2Sensor()
+        self.co2.start()
         # 6가지의 데이터를 주기적으로 측정
 
         # 액추에이터 객체 생성 및 제어
-        # self.pump = Pump() # 물 펌프
-        # self.led = Actuator(13) # P.13 핀에 LED
-        # self.fan = Actuator(5) # P.5 핀에 FAN
-        # self.humidifier = Actuator(10) # P.10 핀에 가습기
-        # self.blind = Blind() # 서보모터 (블라인드)
+        self.pump = Pump() # 물 펌프
+        self.led = Actuator(13) # P.13 핀에 LED
+        self.fan = Actuator(5) # P.5 핀에 FAN
+        self.humidifier = Actuator(10) # P.10 핀에 가습기
+        self.blind = Blind() # 서보모터 (블라인드)
         # 히터 액추 추가 예정
         
         # 타임랩스 카메라 객체 생성
@@ -149,37 +149,35 @@ class MqttWorker:
 
     # publish 메시지를 보내는 메서드
     # 센서가 수집하는 모든 데이터를 한번에 모아서 전송하는 방식
-    # def publish_all_sensor_data(self):
-    #     global pub_topic
-    #     while True:
-    #         try:
-    #             # 각 센서 객체에서 최신 데이터 가져오기
-    #             payload = {
-    #                 "temp": self.dht.data["temp"],
-    #                 "humidity": self.dht.data["humi"],
-    #                 "soilMoisture": self.mcp.data["soil_moisture"],
-    #                 "lightPower": self.mcp.data["lightpower"],
-    #                 "waterLevel": self.water_level.data["water_level"],
-    #                 "co2": self.co2.data["co2"]
-    #             }
+    def publish_all_sensor_data(self):
+        global pub_topic
+        while True:
+            try:
+                # 각 센서 객체에서 최신 데이터 가져오기
+                payload = {
+                    "temp": self.dht.data["temp"],
+                    "humidity": self.dht.data["humi"],
+                    "soilMoisture": self.mcp.data["soil_moisture"],
+                    "lightPower": self.mcp.data["lightpower"],
+                    "waterLevel": self.water_level.data["water_level"],
+                    "co2": self.co2.data["co2"]
+                }
 
-    #             json_str = json.dumps(payload)
-    #             self.client.publish(pub_topic + "/sensor", json_str)
-    #             print(f"Sent ALL Data: {json_str}")
-    #         except Exception as e:
-    #             print(f"Publish Error: {e}")
+                json_str = json.dumps(payload)
+                self.client.publish(pub_topic + "/sensor", json_str)
+                print(f"Sent ALL Data: {json_str}")
+            except Exception as e:
+                print(f"Publish Error: {e}")
 
-    #         time.sleep(5) # 5초마다 반복 전송
+                time.sleep(5) # 5초마다 반복 전송
 
     # MQTT 서버연결을 하는 메서드 - 사용자정의
     def mymqtt_connect(self):
         try:
             print("브로커 연결 시작하기")
-            self.client.connect("192.168.14.50",1883,60)
+            self.client.connect("192.168.14.116",1883,60)
             self.client.loop_start()
-            # self.publish_all_sensor_data()
-            while True:
-                time.sleep(1)
+            self.publish_all_sensor_data()
         except KeyboardInterrupt:
             pass
         finally:

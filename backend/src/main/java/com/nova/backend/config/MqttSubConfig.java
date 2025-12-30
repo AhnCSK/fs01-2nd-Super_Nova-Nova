@@ -54,11 +54,11 @@ public class MqttSubConfig {
     }
     // --- 채널에 데이터가 들어오는지 확인하는 코드 (디버깅용) ---
     // MqttService가 없어도 이 코드가 있으면 메시지 도착 시 로그가 찍힙니다.
-    @Bean
-    public IntegrationFlow logFlow() {
-        return f -> f.channel("mqttInputChannel")
-                .handle(m -> {
-                    System.out.println(">>> [디버깅] 채널 통과 중: " + m.getPayload());
-                });
-    }
+//    @Bean
+//    public IntegrationFlow logFlow() {
+//        return f -> f.channel("mqttInputChannel")
+//                .handle(m -> {
+//                    System.out.println(">>> [디버깅] 채널 통과 중: " + m.getPayload());
+//                });
+//    }
 }
