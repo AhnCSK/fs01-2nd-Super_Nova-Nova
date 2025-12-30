@@ -169,7 +169,7 @@ class MqttWorker:
             except Exception as e:
                 print(f"Publish Error: {e}")
 
-                time.sleep(5) # 5초마다 반복 전송
+            time.sleep(5) # 5초마다 반복 전송
 
     # MQTT 서버연결을 하는 메서드 - 사용자정의
     def mymqtt_connect(self):
