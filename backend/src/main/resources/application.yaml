@@ -30,7 +30,7 @@ spring:
       encoding: UTF-8
       mode: always
   jpa:
-    show-sql: false
+    show-sql: true
     hibernate:
       #      ddl-auto: create
       ddl-auto: none

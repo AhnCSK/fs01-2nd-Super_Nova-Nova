@@ -20,4 +20,11 @@ public class AlarmResponseDTO {
 
     private LocalDateTime createdAt;
     private boolean isRead;
+
+    private String farmName;
+    private Long farmId;
+
+    public boolean getRead() {
+        return isRead;
+    }
 }

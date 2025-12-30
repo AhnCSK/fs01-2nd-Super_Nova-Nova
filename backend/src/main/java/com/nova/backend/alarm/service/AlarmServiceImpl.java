@@ -2,14 +2,19 @@ package com.nova.backend.alarm.service;
 
 import com.nova.backend.alarm.dao.AlarmDAO;
 import com.nova.backend.alarm.dto.AlarmResponseDTO;
+import com.nova.backend.alarm.dto.DashboardAlarmResponse;
 import com.nova.backend.alarm.entity.PlantAlarmEntity;
 import com.nova.backend.alarm.repository.PlantAlarmRepository;
+import com.nova.backend.alarm.sse.AlarmSseEmitterManager;
 import com.nova.backend.farm.entity.FarmEntity;
 import com.nova.backend.farm.repository.FarmRepository;
 import com.nova.backend.preset.entity.PresetStepEntity;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,6 +28,7 @@ public class AlarmServiceImpl implements AlarmService {
     private final FarmRepository farmRepository;
     private final ModelMapper modelMapper;
     private final PlantAlarmRepository plantAlarmRepository;
+    private final AlarmSseEmitterManager sseEmitterManager;
 
     // farm 조회 공통 메서드
     private FarmEntity getFarm(Long farmId) {
@@ -79,12 +85,10 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public void readAllAlarms(Long farmId) {
-        FarmEntity farmEntity = farmRepository.findById(farmId).orElse(null);
-        if (farmEntity == null) return;
-
+    @Transactional
+    public void readAllAlarms(Long userId) {
         List<PlantAlarmEntity> unreadAlarms =
-                alarmDAO.findUnreadByFarm(farmEntity);
+                plantAlarmRepository.findByUser_UserIdAndIsReadFalseOrderByCreatedAtDesc(userId);
 
         for (PlantAlarmEntity alarm : unreadAlarms) {
             alarm.setRead(true);
@@ -93,6 +97,7 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
+    @Transactional
     public void createSensorAlarm(FarmEntity farm, String alarmType, String title, String message) {
         PresetStepEntity step = farm.getPresetStep();
         if (step == null || step.getPreset() == null) {
@@ -104,7 +109,7 @@ public class AlarmServiceImpl implements AlarmService {
                 .user(farm.getNova().getUser())
                 .preset(step.getPreset())
                 .presetStep(step)
-                .alarmType("SENSOR")
+                .alarmType(alarmType)
                 .title(title)
                 .message(message)
                 .isRead(false)
@@ -112,11 +117,34 @@ public class AlarmServiceImpl implements AlarmService {
                 .build();
 
         alarmDAO.save(alarm);
+        // SSE 전송!!!!!!!!!!!!!!!! (db저장 이후에 보내야됨/프론트가 받은 dto를 그대로 쓸 수o)
+        AlarmResponseDTO dto = modelMapper.map(alarm, AlarmResponseDTO.class);
+        dto.setAlarmId(alarm.getAlarmId());
+        dto.setFarmId(alarm.getFarm().getFarmId());
+        dto.setFarmName(alarm.getFarm().getFarmName());
+        dto.setAlarmType(alarm.getAlarmType());
+        dto.setRead(false);
+        TransactionSynchronizationManager.registerSynchronization(
+                new TransactionSynchronization() {
+                    @Override
+                    public void afterCommit() {
+                        sseEmitterManager.send(alarm.getUser().getUserId(), dto);
+                    }
+                }
+        );
     }
 
     @Override
-    public List<AlarmResponseDTO> getAlarmsByReadStatus(Long farmId, boolean isRead) {
+    public List<AlarmResponseDTO> getAlarmsByReadStatus(Long farmId, Boolean isRead) {
         FarmEntity farm = getFarm(farmId);
+
+        if (isRead == null) {
+            return plantAlarmRepository
+                    .findByFarmOrderByCreatedAtDesc(farm)
+                    .stream()
+                    .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
+                    .toList();
+        }
 
         return plantAlarmRepository
                 .findByFarmAndIsReadOrderByCreatedAtDesc(farm, isRead)
@@ -138,15 +166,174 @@ public class AlarmServiceImpl implements AlarmService {
     }
 
     @Override
-    public List<AlarmResponseDTO> getAlarmPageAlarmsByTypeAndRead(Long farmId, String alarmType, boolean isRead) {
+    public List<AlarmResponseDTO> getAlarmPageAlarmsByTypeAndRead(Long farmId, String alarmType, Boolean isRead) {
         FarmEntity farm = getFarm(farmId);
+        List<PlantAlarmEntity> alarms;
 
-        return plantAlarmRepository
-                .findByFarmAndAlarmTypeAndIsReadOrderByCreatedAtDesc(
-                        farm, alarmType, isRead
-                )
-                .stream()
+        if ("SENSOR".equalsIgnoreCase(alarmType)) {
+            // SENSOR 탭 = sensor
+            if (isRead == null) {
+                alarms = plantAlarmRepository
+                        .findByFarmAndAlarmTypeOrderByCreatedAtDesc(farm, "sensor");
+            } else {
+                alarms = plantAlarmRepository
+                        .findByFarmAndAlarmTypeAndIsReadOrderByCreatedAtDesc(
+                                farm, "sensor", isRead);
+            }
+        } else if ("EVENT".equalsIgnoreCase(alarmType)) {
+            // EVENT 탭 = 여러 타입 묶음
+            List<String> eventTypes = List.of(
+                    "actuator",
+                    "preset",
+                    "anniversary",
+                    "water",
+                    "log");
+            if (isRead == null) {
+                alarms = plantAlarmRepository
+                        .findByFarmAndAlarmTypeInOrderByCreatedAtDesc(farm, eventTypes);
+            } else {
+                alarms = plantAlarmRepository
+                        .findByFarmAndAlarmTypeInAndIsReadOrderByCreatedAtDesc(
+                                farm, eventTypes, isRead
+                        );
+            }
+        } else {
+            // ALL
+            if (isRead == null) {
+                alarms = plantAlarmRepository.findByFarmOrderByCreatedAtDesc(farm);
+            } else {
+                alarms = plantAlarmRepository.findByFarmAndIsReadOrderByCreatedAtDesc(farm, isRead);
+            }
+        }
+        return alarms.stream()
                 .map(alarm -> modelMapper.map(alarm, AlarmResponseDTO.class))
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void readAlarm(Long alarmId) {
+        PlantAlarmEntity alarm = plantAlarmRepository
+                .findById(alarmId)
+                .orElseThrow(() -> new IllegalArgumentException("알람 없음"));
+
+        if (!alarm.isRead()) {
+            alarm.setRead(true);
+            // dirty checking → isRead 컬럽값 1로 update
+        }
+    }
+
+    public List<AlarmResponseDTO> getUserAlarmPage(
+            Long userId,
+            String alarmType,
+            Boolean isRead
+    ) {
+        List<PlantAlarmEntity> alarms;
+        // 알람 타입 매핑(프론트 기준으로
+        List<String> alarmTypes = null;
+        if ("SENSOR".equalsIgnoreCase(alarmType)) {
+            alarmTypes = List.of("sensor");
+        } else if ("EVENT".equalsIgnoreCase(alarmType)) {
+            alarmTypes = List.of(
+                    "actuator",
+                    "preset",
+                    "anniversary",
+                    "log"
+            );
+        }
+        if (alarmTypes == null) {
+            // ALL
+            if (isRead == null) {
+                alarms = plantAlarmRepository
+                        .findByUser_UserIdOrderByCreatedAtDesc(userId);
+            } else {
+                alarms = plantAlarmRepository
+                        .findByUser_UserIdAndIsReadOrderByCreatedAtDesc(userId, isRead);
+                }
+        } else {
+            // SENSOR, EVENT
+            if (isRead == null) {
+                alarms = plantAlarmRepository
+                        .findByUser_UserIdAndAlarmTypeInOrderByCreatedAtDesc(userId, alarmTypes);
+            } else {
+                alarms = plantAlarmRepository
+                        .findByUser_UserIdAndAlarmTypeInAndIsReadOrderByCreatedAtDesc(
+                                    userId, alarmTypes, isRead);
+            }
+        }
+        return alarms.stream()
+                .map(alarm -> {
+                    AlarmResponseDTO dto = modelMapper.map(alarm, AlarmResponseDTO.class);
+                    dto.setFarmName(alarm.getFarm().getFarmName());
+                    return dto;
+                })
+                .toList();
+    }
+
+    @Override
+    public DashboardAlarmResponse getDashboardAlarm(Long farmId) {
+        FarmEntity farm = getFarm(farmId);
+
+        LocalDateTime todayStart = LocalDate.now().atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<AlarmResponseDTO> today =
+                plantAlarmRepository
+                        .findTop10ByFarmAndIsReadFalseAndCreatedAtBetweenOrderByCreatedAtDesc(
+                                farm, todayStart, now
+                        )
+                        .stream()
+                        .map(alarm -> {
+                            AlarmResponseDTO dto = modelMapper.map(alarm, AlarmResponseDTO.class);
+                            dto.setFarmName(alarm.getFarm().getFarmName());
+                            return dto;
+                        })
+                        .toList();
+
+        List<AlarmResponseDTO> previous =
+                plantAlarmRepository
+                        .findTop10ByFarmAndIsReadFalseAndCreatedAtBeforeOrderByCreatedAtDesc(
+                                farm, todayStart
+                        )
+                        .stream()
+                        .map(alarm -> {
+                            AlarmResponseDTO dto = modelMapper.map(alarm, AlarmResponseDTO.class);
+                            dto.setFarmName(alarm.getFarm().getFarmName());
+                            return dto;
+                        })
+                        .toList();
+
+        return new DashboardAlarmResponse(today, previous);
+    }
+    @Transactional
+    @Override
+    public void readDashboardTodayAlarms(Long farmId) {
+        FarmEntity farm = getFarm(farmId);
+
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+        LocalDateTime now = LocalDateTime.now();
+
+        List<PlantAlarmEntity> alarms =
+                plantAlarmRepository
+                        .findTop10ByFarmAndIsReadFalseAndCreatedAtBetweenOrderByCreatedAtDesc(
+                                farm, start, now
+                        );
+
+        alarms.forEach(a -> a.setRead(true));
+    }
+    @Transactional
+    @Override
+    public void readDashboardPreviousAlarms(Long farmId) {
+        FarmEntity farm = getFarm(farmId);
+
+        LocalDateTime start = LocalDate.now().atStartOfDay();
+
+        List<PlantAlarmEntity> alarms =
+                plantAlarmRepository
+                        .findTop10ByFarmAndIsReadFalseAndCreatedAtBeforeOrderByCreatedAtDesc(
+                                farm, start
+                        );
+
+        alarms.forEach(a -> a.setRead(true));
     }
 }

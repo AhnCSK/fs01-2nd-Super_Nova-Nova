@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,4 +28,10 @@ public interface FarmRepository extends JpaRepository<FarmEntity,Long> {
     Optional<FarmEntity> findByNova_NovaSerialNumberAndSlot(String novaSerialNumber, int slot);
 
     FarmEntity findByNova_NovaIdAndSlot(Long novaId, int slot);
+    
+    @Query("SELECT f FROM FarmEntity f " +
+           "JOIN FETCH f.presetStep ps " +
+           "WHERE ps IS NOT NULL " +
+           "AND FUNCTION('TIMESTAMPDIFF', DAY, f.updateTime, :now) >= ps.periodDays")
+    List<FarmEntity> findFarmListToGrow(Timestamp now);
 }

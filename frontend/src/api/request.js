@@ -10,6 +10,8 @@ const requests = {
   presetList: "/preset/list",
   presetStep: "/preset/step",
   farmCreate: "/farm/create",
+  farmUpdate: "/farm/update",
+  farmDelete: "/farm/delete",
   timelapseView: "/timelapse/view",
   myPageCheckPassword: "/mypage/checkpassword",
   farmDashboard: "/farm/dashboard",
@@ -18,6 +20,11 @@ const requests = {
   getUnreadAlarms: "/alarm/unread",
   readAllAlarms: "/alarm/read-all",
   timelapseVideo: "/timelapse/video",
+  getAlarmPage: "/alarm/page",
+  readAlarms: "/alarm/read",
+  dashboardAlarms: "/alarm/dashboard",
+  readDashboardTodayAll: "/alarm/dashboard/today/read-all",
+  readDashboardPreviousAll: "/alarm/dashboard/previous/read-all",
 };
 
 export default requests;
