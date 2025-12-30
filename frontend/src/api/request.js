@@ -10,6 +10,8 @@ const requests = {
   presetList: "/preset/list",
   presetStep: "/preset/step",
   farmCreate: "/farm/create",
+  farmUpdate: "/farm/update",
+  farmDelete: "/farm/delete",
   timelapseView: "/timelapse/view",
   myPageCheckPassword: "/mypage/checkpassword",
   farmDashboard: "/farm/dashboard",
