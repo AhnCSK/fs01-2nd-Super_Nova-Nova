@@ -130,7 +130,22 @@
 - 데이터를 기반으로 [구체적인 제안 내용]
 
 --------------------------
+# 주요 기능 (영상)
+## 로그인 기능
+https://drive.google.com/file/d/1xUre3cH7n7xE1ugdeM7XMvpgJJXjxTge/view?usp=drive_link
+## 마이페이지 기능
+[마이페이지-마지막수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
+## 식물 관리 기능
+[2nd_회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
 
+[2nd_팜 신규생성 완성본.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
+
+[2nd_프리셋 자동변경 완성본.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
+
+[2nd_팜 삭제 완성본.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
+
+## 타임랩스 기능
+[타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
 # 프로젝트 회고
 
 ## 1. 프로젝트 개요
