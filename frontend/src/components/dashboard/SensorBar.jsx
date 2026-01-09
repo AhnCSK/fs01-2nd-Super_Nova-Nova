@@ -4,9 +4,9 @@ import "./SensorBar.css";
 const SENSOR_RANGES = {
   temperature: { min: -10, max: 50 },
   soil: { min: 0, max: 100 },
-  light: { min: 0, max: 1000 },
+  light: { min: 0, max: 100 },
   humidity: { min: 0, max: 100 },
-  co2: { min: 0, max: 1500 },
+  co2: { min: 0, max: 3000 },
 };
 
 function getStatus(value, min, max) {
@@ -30,18 +30,18 @@ export default function SensorBar({ sensor, preset_step }) {
     {
       type: "soil",
       label: "Soil Moisture",
-      value: sensor.soil_moisture,
-      presetMin: preset_step?.soil?.min,
-      presetMax: preset_step?.soil?.max,
+      value: sensor.soil,
+      presetMin: preset_step?.soilMoisture?.min,
+      presetMax: preset_step?.soilMoisture?.max,
       unit: "%",
     },
     {
       type: "light",
       label: "Light",
-      value: sensor.lightPower,
-      presetMin: preset_step?.light?.min,
-      presetMax: preset_step?.light?.max,
-      unit: "lx",
+      value: sensor.light,
+      presetMin: preset_step?.lightPower?.min,
+      presetMax: preset_step?.lightPower?.max,
+      unit: "%",
     },
     {
       type: "humidity",
@@ -112,10 +112,7 @@ function SensorRow({ type, label, value, presetMin, presetMax, unit }) {
       <div className="bar-group">
         {/* 메인 바 */}
         <div className={`bar-bg bar-${status.toLowerCase()}`}>
-          <div
-            className={`bar-fill bar-fill-${status.toLowerCase()}`}
-            style={{ width: `${percent}%` }}
-          />
+          <div className={`bar-fill bar-fill-${status.toLowerCase()}`} style={{ width: `${percent}%` }} />
 
           {/* 말풍선 현재값 */}
           <div className="value-bubble" style={{ left: `${percent}%` }}>
