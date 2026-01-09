@@ -102,7 +102,7 @@ public class SensorServiceImpl implements SensorService {
         checkThreshold(farm,"SOIL_MOISTURE",sensorLog.getSoilMoisture(),step.getSoilMoisture()); // 토양수분 처리 로직
         checkThreshold(farm,"LIGHT",sensorLog.getLightPower(),step.getLightPower()); // 광량 처리 로직
         checkThreshold(farm,"CO2",sensorLog.getCo2(),step.getCo2()); // Co2 처리 로직
-//        checkThreshold(sensorLog,); // 이 수위 퍼센티지는 어떻게 판단해야하는가.
+//        checkThreshold(farm, "WATER", sensorLog.getWaterLevel(),step.getCo2()); // 이 수위 퍼센티지는 어떻게 판단해야하는가. 더미값 추가
     }
 
     @Override
@@ -203,12 +203,13 @@ public class SensorServiceImpl implements SensorService {
                 sensorState= "max";
                 mapKey = sensorType.toUpperCase() + "_" + "HIGH";
             }
+            if(mapKey.equals("SOIL_MOISTURE_HIGH"))
+                return;
             act = ACTUATOR_MAP.get(mapKey);
 
             // 새로 들어온 알림이 기존 알림과 동일할 경우 알림 중복 방지 (실행 x)
             if (alarmActive.equals(sensorState)) {
                 System.out.printf("중복 알림 방지, %s %s 값이 범위 내에 있지 않음.%n",farm.getFarmName(),sensorType);
-
             }
             else{
                 // 최초로 벗어났을 때 알람 생성
