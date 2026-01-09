@@ -158,7 +158,8 @@
 
  | **ERD**                             |
  |-------------------------------------|
- | ![ERD_Final.png](img/ERD_Final.png) |
+ | <img width="1919" height="2043" alt="image" src="https://github.com/user-attachments/assets/f9d7136c-3a0d-4c1b-bc97-bd59a31543ad" />
+ |
 
  | **REST API (Swagger)**                        |
  |-------------------------------------|
