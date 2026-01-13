@@ -266,7 +266,6 @@
  | **ERD**                             |
  |-------------------------------------|
  | <img width="1919" height="2043" alt="image" src="https://github.com/user-attachments/assets/f9d7136c-3a0d-4c1b-bc97-bd59a31543ad" />
- |
 
  | **REST API (Swagger)**                        |
  |-------------------------------------|
@@ -298,13 +297,13 @@
 [마이페이지 조회 및 정보 수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
 
 ### 식물 관리 기능
-[2nd_회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
+[회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
 
-[2nd_팜 신규생성 완성본.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
+[팜 신규생성 완성본.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
 
-[2nd_프리셋 자동변경 완성본.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
+[프리셋 자동변경 완성본.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
 
-[2nd_팜 삭제 완성본.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
+[팜 삭제 완성본.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
 
 ### 타임랩스 기능
 [타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
