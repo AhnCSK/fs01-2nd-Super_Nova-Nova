@@ -288,9 +288,9 @@
 
 
 --------------------------
-# 서비스 시연영상
-## 슈퍼노바 서비스 전체영상 
-[슈퍼노바 전체영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
+# 프로젝트 시연 영상
+## 슈퍼노바 영상 
+[슈퍼노바 영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
 
 ## 기능별 영상
 ### 로그인 기능
@@ -302,13 +302,13 @@
 ### 식물 관리 기능
 [회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
 
-[팜 신규생성 완성본.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
+[팜 신규생성.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
 
-[프리셋 자동변경 완성본.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
+[프리셋 자동변경.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
 
 [액추에이터 확인 및 팜별 대시보드 상세보기.mp4](https://drive.google.com/file/d/1TvfONO2HhXcFio3zQSD54-yHBC7A8_iQ/view?usp=sharing)
 
-[팜 삭제 완성본.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
+[팜 삭제.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
 
 ### 타임랩스 기능
 [타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
