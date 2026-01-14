@@ -1,3 +1,35 @@
+--------------------------
+
+# 프로젝트 시연 영상
+## 슈퍼노바 영상 
+[슈퍼노바 영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
+
+## 기능별 영상
+### 로그인 기능
+[로그인 기능.mp4](https://drive.google.com/file/d/1xUre3cH7n7xE1ugdeM7XMvpgJJXjxTge/view?usp=drive_link)
+
+### 마이페이지 기능
+[마이페이지 조회 및 정보 수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
+
+### 식물 관리 기능
+[회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
+
+[팜 신규생성.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
+
+[프리셋 자동변경.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
+
+[액추에이터 확인 및 팜별 대시보드 상세보기.mp4](https://drive.google.com/file/d/1TvfONO2HhXcFio3zQSD54-yHBC7A8_iQ/view?usp=sharing)
+
+[팜 삭제.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
+
+### 타임랩스 기능
+[타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
+
+### 주문결제 및 관리자 대시보드
+[주문결제 및 관리자 대시보드.mp4](https://drive.google.com/file/d/1dxLjyDXzhAOx9DI-gmOZhonM8nDzchc2/view?usp=sharing)
+
+--------------------------
+
 ## 1. 프로젝트 정의
 - **목표**: IoT 센서와 액추에이터를 활용하여 농작물 재배 환경(온도, 습도, 조도 등)을 실시간으로 모니터링하고,
 자동 및 수동 제어가 가능한 웹 브라우저 스마트팜 관리 시스템을 구축한다.
@@ -286,36 +318,7 @@
 
 ![대시보드 스크린샷](https://github.com/user-attachments/assets/01190ef5-1be9-457f-a7ca-5d722ebf9de2)
 
-
 --------------------------
-# 프로젝트 시연 영상
-## 슈퍼노바 영상 
-[슈퍼노바 영상.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
-
-## 기능별 영상
-### 로그인 기능
-[로그인 기능.mp4](https://drive.google.com/file/d/1xUre3cH7n7xE1ugdeM7XMvpgJJXjxTge/view?usp=drive_link)
-
-### 마이페이지 기능
-[마이페이지 조회 및 정보 수정.mp4](https://drive.google.com/file/d/1_blTPNMUX3x7_n5tpdCmSY5b8yt8AwrZ/view?usp=sharing)
-
-### 식물 관리 기능
-[회원 노바And팜 조회 완성본.mp4](https://drive.google.com/file/d/1lRNiqK3MS1izKkW3WjqSKqH9rWcmRuzX/view?usp=sharing)
-
-[팜 신규생성.mp4](https://drive.google.com/file/d/1bMwbJ-wOrNtoBOh_LQoo0fG0Jm7vGS9M/view?usp=sharing)
-
-[프리셋 자동변경.mp4](https://drive.google.com/file/d/11_yBN19purf_XMGhIxTtD5ylecIgLOkr/view?usp=sharing)
-
-[액추에이터 확인 및 팜별 대시보드 상세보기.mp4](https://drive.google.com/file/d/1TvfONO2HhXcFio3zQSD54-yHBC7A8_iQ/view?usp=sharing)
-
-[팜 삭제.mp4](https://drive.google.com/file/d/1jxLBPN6ZmEsZgjwlw2vBvUZTDrg2W6iY/view?usp=sharing)
-
-### 타임랩스 기능
-[타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
-
-### 주문결제 및 관리자 대시보드
-[주문결제 및 관리자 대시보드.mp4](https://drive.google.com/file/d/1dxLjyDXzhAOx9DI-gmOZhonM8nDzchc2/view?usp=sharing)
-
 # 프로젝트 회고
 
 ## 1. 프로젝트 개요
