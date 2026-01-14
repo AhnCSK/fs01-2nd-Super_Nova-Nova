@@ -24,7 +24,7 @@
 ### 타임랩스 기능
 [타임랩스생성.mp4](https://drive.google.com/file/d/1BSTH9gb2QcsDmj2R12R-zhsMMd2O6hlg/view?usp=sharing)
 
-### 주문결제 및 관리자 대시보드
+### 결제 및 관리자 대시보드기능
 [주문결제 및 관리자 대시보드.mp4](https://drive.google.com/file/d/1dxLjyDXzhAOx9DI-gmOZhonM8nDzchc2/view?usp=sharing)
 
 --------------------------
