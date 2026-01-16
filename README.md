@@ -1,3 +1,16 @@
+--------------------------
+
+## 1. 시각화 요약
+- 온도 및 습도 변화 패턴을 시각적으로 확인 가능
+- 환경 조건에 따른 액추에이터 자동 제어 가능성 확인
+- SSE 기반 실시간 대시보드를 통해 센서 데이터 변화 반영
+- 임계값 초과 시 실시간 팝업 알림 및 센서바 그래프의 UI, 액추에이터 상태 표시 정상 동작 확인
+- SSE 미연결 상황에서도 Polling 방식으로 알림 수신 가능함을 검증
+
+## 2. 시각 자료
+
+![대시보드 스크린샷](https://github.com/user-attachments/assets/01190ef5-1be9-457f-a7ca-5d722ebf9de2)
+
 # 가정용 스마트팜 올인원 플랫폼 NOVA 시연 영상
 
 [NOVA 시연.mp4](https://drive.google.com/file/d/1juU8FLpaPTpQyk8qM9lvyKKgEAJCKTL0/view?usp=sharing)
@@ -27,6 +40,10 @@
 ### 결제 및 관리자 대시보드기능
 [주문결제 및 관리자 대시보드.mp4](https://drive.google.com/file/d/1dxLjyDXzhAOx9DI-gmOZhonM8nDzchc2/view?usp=sharing)
 
+### 실물 모형
+|실물 모형|
+|-------|
+| ![FarmModel](https://github.com/user-attachments/assets/b9dca21b-882c-4528-b1f5-3455ebe20272) |
 
 --------------------------
 
@@ -126,11 +143,6 @@
     - 웹 기반 액추에이터 원격 제어 테스트
     - 스마트팜 + 마켓 기능 통합 검증  
 
-    
-### 시각 자료
-|실물 모형|
-|-------|
-| ![FarmModel](https://github.com/user-attachments/assets/b9dca21b-882c-4528-b1f5-3455ebe20272) |
 
 ---------------------------
 
@@ -308,20 +320,7 @@
  |-------------------------------------|
  |<img width="1456" height="951" alt="Swagger RESTAPI" src="https://github.com/user-attachments/assets/9e14688a-b4a7-44cd-929e-2eb08be98bdb" />
 
---------------------------
 
-## 5. 시각화 리포트
-
-## 1. 분석 결과 요약
-- 온도 및 습도 변화 패턴을 시각적으로 확인 가능
-- 환경 조건에 따른 액추에이터 자동 제어 가능성 확인
-- SSE 기반 실시간 대시보드를 통해 센서 데이터 변화 반영
-- 임계값 초과 시 실시간 팝업 알림 및 센서바 그래프의 UI, 액추에이터 상태 표시 정상 동작 확인
-- SSE 미연결 상황에서도 Polling 방식으로 알림 수신 가능함을 검증
-
-## 2. 대시보드
-
-![대시보드 스크린샷](https://github.com/user-attachments/assets/01190ef5-1be9-457f-a7ca-5d722ebf9de2)
 
 --------------------------
 ## 6. 프로젝트 회고
